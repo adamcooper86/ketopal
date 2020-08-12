@@ -1,5 +1,25 @@
 1. The data base - info on deployment, dev info, etc.
-2. The resources
+## Resources
+
+### User
+
+The user is polymorphic depending on the role of the user. Dieticians will be linked to clients either through a join table DieticianClients, or through a double join, DieticianOrganization and OrganizationClients. 
+
+- id : int
+- role : var_char (client, dietician, clinic_admin, site_admin)
+- pw_hash : char
+- first_name : var_char
+- last_name : var_char
+- email : var_char
+- phone : var_char
+- address : var_char
+
+
+### Key
+
+### Food
+
+### Meal
 
 ## Dietary Data
 
