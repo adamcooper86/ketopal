@@ -3,23 +3,91 @@
 
 ### User
 
-The user is polymorphic depending on the role of the user. Dieticians will be linked to clients either through a join table DieticianClients, or through a double join, DieticianOrganization and OrganizationClients. 
+The user is polymorphic depending on the role of the user. Dieticians will be linked to clients either through a join table DieticianClients, or through a double join, OrganizationDieticians and OrganizationClients. 
 
-- id : int
-- role : var_char (client, dietician, clinic_admin, site_admin)
-- pw_hash : char
+- id : int NotNull
+- role : var_char (client, dietician, organization_admin, site_admin) NotNull
+- pw_hash : var_char NotNull
+- email : var_char NotNull
 - first_name : var_char
 - last_name : var_char
-- email : var_char
 - phone : var_char
-- address : var_char
+- address_line_1 : var_char
+- address_line_2 : var_char
+- city : var_char
+- state : char(2) 
+- zip : var_char
+- created : timestamp NotNull
+- updated : timestamp NotNull
+
+### Organization
+
+An organization represents a group of dieticians/physicians who collectively manage a group of clients. Each organization must have at least one organization_admin, and must have exactly one primary_organization_admin. The primary will have special privalages, and would be who we contact when needed.
+
+- id : int NotNull
+- name : var_char
+- phone : var_char
+- primary_organization_admin : int FK NotNull 
+- address_line_1 : var_char
+- address_line_2 : var_char
+- city : var_char
+- state : char(2) 
+- zip : var_char
+- created : timestamp NotNull
+- updated : timestamp NotNull
+
+
+### OrganizationDieticians
+
+A simple join table linking an organization to their group of dieticians. (M:M)
+
+
+### OrganizationClients
+
+A simple join table linking an organization to their group of clients. (M:M)
+
+
+### DieticianClients
+
+A simple join table linking a dietician to their group of clients. (M:M)
+
 
 
 ### Key
 
+The key is the core way the app securely accesses the api. 
+
+- id : char NotNull
+- user_id : int FK NotNull
+- expires : timestamp NotNull
+- created : timestamp NotNull
+- updated : timestamp NotNull
+
+
 ### Food
 
-### Meal
+Food items are the basic building blocks for recipes and are imported from the dietary data sources below, or created by a clients dietician. 
+
+- id : var_char NotNull
+- name : var_char 
+- dietician_id : var_char FK
+- carbs : float
+- fats : float
+- protien : float
+- micros : var_char
+
+### Recipe
+
+Recipes are the base unit for building meals/snacks. They are polymorphic based on role and contain the metadata; title, date, etc.
+
+- id : char NotNull
+- user_id : int FK NotNull
+- role : char (snack, meal)
+- title : var_char
+- notes : var_char
+- created: timestamp NotNull
+- updated : timestamp NotNull
+
 
 ## Dietary Data
 
